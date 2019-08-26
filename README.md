@@ -1,3 +1,3 @@
 
-# MEXC Token Contract
+# DIGID Token Contract
 
