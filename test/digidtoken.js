@@ -44,53 +44,82 @@ contract("DIGIDToken", accounts => {
     assert.equal("FOO", symbol, "Symbol should be FOO");
   });
 
-  it("should have a max supply of 1714285714", async () => {
+  it("should have a max supply of 2000000000", async () => {
     let ms = await digid.maxSupply();
     let ts = await digid.totalSupply();
 
     assert.equal(
-      1714285714 * 10 ** 18,
+      2000000000 * 10 ** 18,
       ms,
       // toWei("1714285714", "ether"),
-      "Max supply should be 1714285714"
+      "Max supply should be 2000000000"
     );
     assert.equal(0 * 10 ** 18, ts, "Max supply should be 0");
   });
 
   it("should increase the supply for another 1b", async () => {
     assert.equal(
-      1714285714 * 10 ** 18,
+      2000000000 * 10 ** 18,
       await digid.maxSupply(),
-      "Max supply should be 1714285714"
+      "Max supply should be 2000000000"
     );
 
     // increase another 1b
     await digid.increaseSupply(toWei("1000000000", "ether"));
 
     assert.equal(
-      2714285714 * 10 ** 18,
+      3000000000 * 10 ** 18,
       await digid.maxSupply(),
-      "Max supply should be 1714285714"
+      "Max supply should be 3000000000"
     );
   });
 
-  it("mint beyond 2b limit", async () => {
+  it("mint beyond 3b limit", async () => {
     assert.equal(
-      2714285714 * 10 ** 18,
+      3000000000 * 10 ** 18,
       await digid.maxSupply(),
-      "Max supply should be 1714285714"
+      "Max supply should be 3000000000"
     );
 
-    // mint 3b DIGID
+    // mint 4b DIGID
     try {
-      await digid.mint(acc1, toWei("3714285714", "ether"));
+      await digid.mint(owner, toWei("1000000000", "ether"));
+      assert.equal(
+        1000000000 * 10 ** 18,
+        await digid.totalSupply(),
+        "Total supply should be 1000000000"
+      );
+
+      // burn the minted
+      await digid.burn(owner, toWei("1000000000", "ether"));
+      assert.equal(
+        0 * 10 ** 18,
+        await digid.totalSupply(),
+        "Total supply should be 0"
+      );
+      assert.equal(
+        3000000000 * 10 ** 18,
+        await digid.maxSupply(),
+        "Max supply should be 3000000000"
+      );
+
+      // mint beyond 3b, this should fail
+      await digid.mint(owner, toWei("4000000000", "ether"));
+
     } catch (e) {
       assert.equal(
-        2714285714 * 10 ** 18,
+        0 * 10 ** 18,
+        await digid.totalSupply(),
+        "Total supply should be 0"
+      );
+      assert.equal(
+        3000000000 * 10 ** 18,
         await digid.maxSupply(),
-        "Max supply should be 1714285714"
+        "Max supply should be 3000000000"
       );
     }
+    // increase supply for below tests
+    // await digid.increaseSupply(toWei("1000000000", "ether"));
   });
 
   it("should mint 1000 DIGID to acc1", async () => {

@@ -766,7 +766,7 @@ contract DIGIDToken is ERC20Mintable, ERC20Burnable, ReentrancyGuard, Ownable {
     string  public name      = "DIGID Token";
     string  public symbol    = "DIGID";
     uint8   public decimals  = 18;
-    uint256 public maxSupply = 1714285714 ether;    // max allowable minting.
+    uint256 public maxSupply = 2000000000 ether;    // max allowable minting.
 
     bool    private _transferAllowed = true;        // allow/disallow transfer.
 
