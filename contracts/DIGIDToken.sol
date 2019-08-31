@@ -954,6 +954,7 @@ contract DIGIDToken is ERC20Mintable, ERC20Burnable, ReentrancyGuard, Ownable {
     function transferOwnership(address newOwner) public onlyOwner {
         super.transferOwnership(newOwner);
         super.addMinter(newOwner);
+        super.renounceMinter();
     }
 
 }
